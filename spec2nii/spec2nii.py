@@ -396,6 +396,7 @@ class spec2nii:
         # Place in data output format
         for idx,d in enumerate(data.T):
             d = d.T
+            d = np.squeeze(d)
             newshape = (1,1,1)+d.shape
             d = d.reshape(newshape)
             self.imageOut.append(d)
