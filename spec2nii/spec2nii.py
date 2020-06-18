@@ -77,6 +77,14 @@ class spec2nii:
         parser_ge.add_argument('-j','--json',help='Create json sidecar.',action='store_true')
         parser_ge.set_defaults(func=self.ge)
 
+        # Handle bruker subcommand
+        parser_bruker = subparsers.add_parser('bruker', help='Convert from bruker seried dir format.')
+        parser_bruker.add_argument('folder', help='Series folder', type=str)
+        parser_bruker.add_argument("-f", "--fileout", type=str, help="Output file name (default = input name)")
+        parser_bruker.add_argument("-o", "--outdir", type=str, help="Output location (default = .)", default='.')
+        parser_bruker.add_argument('-j', '--json', help='Create json sidecar.', action='store_true')
+        parser_bruker.set_defaults(func=self.bruker)
+
         # Handle ismrmrd subcommand
         parser_ismrmrd = subparsers.add_parser('ismrmrd', help='Convert from ismrmrd format.')
         parser_ismrmrd.add_argument('file',help='file to convert',type=str)
@@ -371,6 +379,30 @@ class spec2nii:
                 self.dwellTimes.append(dwelltime)
                 self.metaData.append(meta)
                 self.fileoutNames.append(baseStr+f'_ref_frame{idx:03.0f}')
+
+    def bruker(self, args):
+        # bruker specific imports
+        from spec2nii.bruker import read_bruker_series
+        data, orientation, dwelltime, meta = read_bruker_series(args.folder)
+
+        # name of output
+        if args.fileout:
+            baseStr = args.fileout
+        else:
+            baseStr = op.basename(args.folder)
+
+        currNiftiOrientation = NIFTIOrient(orientation)
+
+        # Place in data output format
+        for idx,d in enumerate(data.T):
+            d = d.T
+            newshape = (1,1,1)+d.shape
+            d = d.reshape(newshape)
+            self.imageOut.append(d)
+            self.orientationInfoOut.append(currNiftiOrientation)
+            self.dwellTimes.append(dwelltime)
+            self.metaData.append(meta)
+            self.fileoutNames.append(baseStr+f'_{idx:04.0f}')
 
     def text(self,args):
         # Read text from file
