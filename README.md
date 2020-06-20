@@ -15,6 +15,7 @@ This table lists the currently supported formats. I have very limited experience
 | Siemens DICOM | .ima / .dcm    | Yes | Yes | Yes                   |
 | Philips       | .SPAR/.SDAT    | Yes | No  | No                    |
 | GE            | .7 (pfile)     | Yes | No  | No                    |
+| Bruker        | fid/method pair| Yes | No  | Yes                   |
 | LCModel       | .RAW           | Yes | No  | No                    |
 | jMRUI         | .txt           | Yes | No  | No                    |
 | ASCII         | .txt           | Yes | No  | No                    |
@@ -41,6 +42,9 @@ Call with the -e flag to specify which MDH flag to convert. e.g.
 
 ### Philips (limited support)
 `spec2nii GE SDAT_FILE SPAR_FILE`
+
+### Bruker
+`spec2nii bruker SERIES-DIR`
 
 ### Text/LCModel/jMRUI
 Conversion from processed formats.
