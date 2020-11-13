@@ -101,9 +101,10 @@ def examineTwix(twixObj,fileName,mraid):
 
     print(f'The file contains these evalinfo flags with dimensions and sizes as follows:')
     for ev in evalInfoFlags:
+        twixObj[ev].flagRemoveOS = False
         twixObj[ev].squeeze = True
-        tmpSqzSize = twixObj[ev].sqzSize()
-        tmpSqzDims = ', '.join(twixObj[ev].sqzDims())
+        tmpSqzSize = twixObj[ev].sqzSize
+        tmpSqzDims = ', '.join(twixObj[ev].sqzDims)
         print(f'{ev: <15}:\t{tmpSqzDims: <20}\t{tmpSqzSize}')
 
     #import pdb; pdb.set_trace()
